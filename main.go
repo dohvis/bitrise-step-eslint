@@ -6,26 +6,42 @@ import (
 	"os/exec"
 )
 
-func main() {
-	fmt.Println("This is the value specified for the input 'example_step_input':", os.Getenv("example_step_input"))
-
-	//
-	// --- Step Outputs: Export Environment Variables for other Steps:
-	// You can export Environment Variables for other Steps with
-	//  envman, which is automatically installed by `bitrise setup`.
-	// A very simple example:
-	cmdLog, err := exec.Command("bitrise", "envman", "add", "--key", "EXAMPLE_STEP_OUTPUT", "--value", "the value you want to share").CombinedOutput()
+func getESLintPath() (bool, string) {
+	isExist := true
+	path, err := exec.LookPath("eslint")
 	if err != nil {
-		fmt.Printf("Failed to expose output with envman, error: %#v | output: %s", err, cmdLog)
-		os.Exit(1)
+		fmt.Println("First of all, install eslint")
+		isExist = false
 	}
-	// You can find more usage examples on envman's GitHub page
-	//  at: https://github.com/bitrise-io/envman
+	return isExist, path
+}
 
-	//
-	// --- Exit codes:
-	// The exit code of your Step is very important. If you return
-	//  with a 0 exit code `bitrise` will register your Step as "successful".
-	// Any non zero exit code will be registered as "failed" by `bitrise`.
-	os.Exit(0)
+func runESLint(eslintPath string, srcDirectory string) bool {
+	nodePath, err := exec.LookPath("node")
+	output, err := exec.Command(nodePath, eslintPath, srcDirectory).CombinedOutput()
+	fmt.Printf("Output: %s\n", string(output[:]))
+	hasError := false
+	if err != nil {
+		hasError = true
+		fmt.Printf("Error: %s\n", err)
+	}
+	return hasError
+}
+
+func main() {
+	// fmt.Println("This is the value specified for the input 'example_step_input':", )
+
+	srcDirectory := os.Getenv("command")
+
+	isExist, eslintPath := getESLintPath()
+	hasError := false
+	if isExist {
+		hasError = runESLint(eslintPath, srcDirectory)
+	}
+
+	exitCode := 0
+	if hasError {
+		exitCode = 1
+	}
+	os.Exit(exitCode)
 }
