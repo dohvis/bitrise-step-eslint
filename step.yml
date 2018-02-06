@@ -64,24 +64,19 @@ toolkit:
 
 
 inputs:
-  - example_step_input: Default Value - you can leave this empty if you want to
+  - workdir: $BITRISE_SOURCE_DIR
     opts:
-      title: "Example Step Input"
-      summary: Summary. No more than 2-3 sentences.
+      title: Working directory
+      summary: Working directory of the step
       description: |
-        Description of this input.
-
-        Can be Markdown formatted text.
+        Working directory of the step.
+        You can leave it empty to not change it.
       is_expand: true
       is_required: true
       value_options: []
-
-outputs:
-  - EXAMPLE_STEP_OUTPUT:
+  - target:
     opts:
-      title: "Example Step Output"
-      summary: Summary. No more than 2-3 sentences.
+      title: Directory or files `eslint` will check
       description: |
-        Description of this output.
-
-        Can be Markdown formatted text.
+        Specify the target to check with `eslint`
+      is_required: true
