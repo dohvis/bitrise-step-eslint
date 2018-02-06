@@ -35,13 +35,12 @@ func main() {
 
 	isExist, eslintPath := getESLintPath()
 	hasError := false
+	exitCode := 1
 	if isExist {
 		hasError = runESLint(eslintPath, srcDirectory)
-	}
-
-	exitCode := 0
-	if hasError {
-		exitCode = 1
+		if !hasError {
+			exitCode = 0
+		}
 	}
 	os.Exit(exitCode)
 }
