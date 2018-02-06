@@ -31,7 +31,7 @@ func runESLint(eslintPath string, srcDirectory string) bool {
 func main() {
 	// fmt.Println("This is the value specified for the input 'example_step_input':", )
 
-	srcDirectory := os.Getenv("command")
+	srcDirectory := os.Getenv("target")
 
 	isExist, eslintPath := getESLintPath()
 	hasError := false
