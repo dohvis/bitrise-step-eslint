@@ -10,8 +10,11 @@ func getESLintPath() (bool, string) {
 	isExist := true
 	path, err := exec.LookPath("eslint")
 	if err != nil {
-		fmt.Println("First of all, install eslint")
-		isExist = false
+		path, err = exec.LookPath("node_modules/eslint/bin/eslint.js")
+		if err != nil {
+			fmt.Println("First of all, install eslint")
+			isExist = false
+		}
 	}
 	return isExist, path
 }
